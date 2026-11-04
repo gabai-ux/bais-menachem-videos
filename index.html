@@ -29,17 +29,40 @@ const knownSpeakers=[
  ['הרב לימא וליהלם',/לימא\s+וליהלם/],
  ['הרב שלום חאריטאנאוו',/שלום\s+חאריטאנאוו/]
 ];
-function canonicalSpeaker(s){const n=norm(s);for(const [name,re] of knownSpeakers)if(re.test(n))return name;return clean(s).replace(/^(?:מפי\s+)?(?:הרב|רבי|רב|ר)\s+/,'').trim()||'לא צוין מגיד שיעור'}
-function getSpeaker(v){for(const field of [v.speaker,v.rabbi,v.maggid_shiur])if(clean(field))return canonicalSpeaker(field);
- const title=clean(v.title),n=norm(title);
- // The Rambam Le'iyuna series is delivered by Rabbi Yaakov Peretz Blooming.
- if(/רמב["״׳']?ם\s+לעיונא/u.test(title))return 'הרב יעקב פרץ בלומינג';
+const UNKNOWN_SPEAKER='לא צוין מגיד שיעור';
+// Names explicitly supplied in titles or metadata are discovered automatically.
+// Keep known aliases first, so spelling variants merge into one rabbi.
+function canonicalSpeaker(s){
+ const n=norm(s);
  for(const [name,re] of knownSpeakers)if(re.test(n))return name;
- // Accept an explicitly labeled speaker in any title segment; do not guess from an unlabeled topic.
- const parts=title.split(/\s*\|\s*/);
- for(const part of parts){const m=part.match(/(?:^|\s)(?:מפי\s+)?(?:הרב|רבי|רב|ר['׳״\u05f3\u05f4]?)\s+([\u0590-\u05ff][\u0590-\u05ff'׳״\u05f3\u05f4\s-]{3,65})/u);
- if(m){const candidate=m[1].replace(/\s*(?:שנת\s+תש\S+|תש[\u0590-\u05ff]+).*$/,'').trim();const words=candidate.split(/\s+/);if(words.length>=2&&words.length<=5)return canonicalSpeaker(candidate)}}
- return 'לא צוין מגיד שיעור'}
+ const stripped=clean(s).replace(/^(?:(?:מפי|ע״י|על ידי)\s+)?(?:הרה״ג|הרה״ח|הרב|רבי|רב|ר['׳״\u05f3\u05f4]?)\s+/u,'').trim();
+ const words=stripped.split(/\s+/).filter(Boolean);
+ if(words.length<2||words.length>5)return UNKNOWN_SPEAKER;
+ return 'הרב '+stripped;
+}
+function extractLabeledSpeaker(title){
+ // Match only explicit speaker labels. Stop at separators or common title context.
+ const sections=title.split(/\s*(?:\||[–—]|\s[-]\s|[;]|\n)\s*/u);
+ const marker=/(?:^|\s)(?:(?:מפי|ע״י|על ידי)\s+)?(?:הרה״ג|הרה״ח|הרב|רבי|רב|ר['׳״\u05f3\u05f4]?)\s+([\u05d0-\u05ea][\u05d0-\u05ea'׳״\u05f3\u05f4\s-]*)/u;
+ const stop=/\s+(?:שליט[״']?א|זצ[״']?ל|בנושא|בעניין|על|בשיעור|בשיחת|בפרשת|פרשת|שיעור|התוועדות|יום|ליל|מוצאי|תאריך|תש[\u05d0-\u05ea]+)\b/u;
+ for(const section of sections){
+  const m=section.match(marker);if(!m)continue;
+  const tail=m[1].split(stop)[0].trim();
+  const words=tail.split(/\s+/).filter(Boolean);
+  if(words.length>=2&&words.length<=5)return canonicalSpeaker(tail);
+ }
+ return UNKNOWN_SPEAKER;
+}
+function getSpeaker(v){
+ for(const field of [v.speaker,v.rabbi,v.maggid_shiur])if(clean(field)){
+  const candidate=canonicalSpeaker(field);if(candidate!==UNKNOWN_SPEAKER)return candidate;
+ }
+ const title=clean(v.title),n=norm(title);
+ // Confirmed series-to-speaker association, including future uploads.
+ if(/רמבם\s+לעיונא/u.test(n))return 'הרב יעקב פרץ בלומינג';
+ for(const [name,re] of knownSpeakers)if(re.test(n))return name;
+ return extractLabeledSpeaker(title);
+}
 const seriesRules=[
  ['היום יום',/היום\s+יום/],['דרך מצוותיך',/דרך\s+מצוותיך/],['לקוטי שיחות',/(?:לקוטי|ליקוטי)\s+שיחות/],['רמב״ם לעיונא',/רמב["״׳']?ם\s+לעיונא/u],['ספר השיחות',/ספר\s+השיחות/],['תניא',/תניא/],['מאמרים',/מאמר(?:ים)?\b/],['התוועדויות',/התוועדות|התוועדויות/],['פרשת השבוע',/פרשת|פרשה/]
 ];
