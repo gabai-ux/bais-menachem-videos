@@ -1,0 +1,42 @@
+name: Sync YouTube Videos
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 */6 * * *'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: youtube-video-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Fetch public uploads
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+        run: python scripts/sync_videos.py
+      - name: Commit updated video index
+        run: |
+          if git diff --quiet -- videos.json && git ls-files --error-unmatch videos.json >/dev/null 2>&1; then
+            echo 'No video changes.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add videos.json
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m 'Update YouTube video library'
+          git push
