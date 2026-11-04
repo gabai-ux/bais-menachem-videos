@@ -64,6 +64,13 @@ function getSpeaker(v){
  for(const [name,re] of knownSpeakers)if(re.test(n))return name;
  return extractLabeledSpeaker(title);
 }
+// A comma, Hebrew comma, semicolon, or line break separates co-presenters.
+// Manual names are kept as entered in Google Sheets.
+function getSpeakers(v){
+ const raw=getSpeaker(v);
+ const names=raw.split(/[,،;؛\n]+/u).map(clean).filter(Boolean);
+ return [...new Set(names.length?names:[UNKNOWN_SPEAKER])];
+}
 const seriesRules=[
  ['היום יום',/היום\s+יום/],['דרך מצוותיך',/דרך\s+מצוותיך/],['לקוטי שיחות',/(?:לקוטי|ליקוטי)\s+שיחות/],['רמב״ם לעיונא',/רמב["״׳']?ם\s+לעיונא/u],['ספר השיחות',/ספר\s+השיחות/],['תניא',/תניא/],['מאמרים',/מאמר(?:ים)?\b/],['התוועדויות',/התוועדות|התוועדויות/],['פרשת השבוע',/פרשת|פרשה/]
 ];
@@ -71,7 +78,7 @@ function getSeries(v){if(clean(v.series))return clean(v.series);if(clean(v.topic
 function fillOptions(el,values){for(const value of [...new Set(values)].sort((a,b)=>a.localeCompare(b,'he'))){const opt=document.createElement('option');opt.value=value;opt.textContent=value;el.append(opt)}}
 function render(){
  const q=norm(search.value);
- const matched=videos.filter(v=>(!q||norm(v.title+' '+v._speaker+' '+v._series).includes(q))&&(!speaker.value||v._speaker===speaker.value)&&(!topic.value||v._series===topic.value));
+ const matched=videos.filter(v=>(!q||norm(v.title+' '+v._speakers.join(' ')+' '+v._series).includes(q))&&(!speaker.value||v._speakers.includes(speaker.value))&&(!topic.value||v._series===topic.value));
  if(sort.value==='old')matched.reverse();else if(sort.value==='az')matched.sort((a,b)=>a.title.localeCompare(b.title,'he'));
  grid.replaceChildren();
  for(const v of matched.slice(0,visible)){
@@ -83,12 +90,12 @@ function render(){
   const body=document.createElement('div');body.className='card-body';
   if(v._series&&v._series!=='שיעורים נוספים'){const meta=document.createElement('div');meta.className='card-meta';const tag=document.createElement('span');tag.className='series-tag';tag.textContent=v._series;meta.append(tag);body.append(meta)}
   const h=document.createElement('h2');h.textContent=v.title;h.title=v.title;body.append(h);
-  if(v._speaker&&v._speaker!==UNKNOWN_SPEAKER){const speakerRow=document.createElement('div');speakerRow.className='speaker-name';const icon=document.createElement('span');icon.className='speaker-icon';icon.setAttribute('aria-hidden','true');icon.textContent='♙';const name=document.createElement('span');name.textContent=v._speaker;speakerRow.append(icon,name);body.append(speakerRow)}
+  if(v._speakers.some(name=>name!==UNKNOWN_SPEAKER)){const speakerRow=document.createElement('div');speakerRow.className='speaker-name';const icon=document.createElement('span');icon.className='speaker-icon';icon.setAttribute('aria-hidden','true');icon.textContent='♙';const name=document.createElement('span');name.textContent=v._speakers.join(' · ');speakerRow.append(icon,name);body.append(speakerRow)}
   const footer=document.createElement('div');footer.className='card-footer';const institution=document.createElement('span');institution.textContent='בית מנחם ליובאוויטש';const watch=document.createElement('span');watch.className='watch-label';watch.textContent='לצפייה בשיעור ◀';footer.append(institution,watch);body.append(footer);
   card.append(btn,body);grid.append(card);
  }
  load.hidden=matched.length<=visible;status.textContent=matched.length?`${Math.min(visible,matched.length)} מתוך ${matched.length} שיעורים`:'לא נמצאו שיעורים מתאימים';
 }
 for(const el of [search,speaker,topic,sort])el.addEventListener(el===search?'input':'change',()=>{visible=24;render()});load.addEventListener('click',()=>{visible+=24;render()});
-fetch('./videos.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Video index not available');return r.json()}).then(data=>{if(!Array.isArray(data))throw Error('Invalid video index');videos=data.filter(v=>v&&v.hidden!==true&&typeof v.id==='string'&&/^[\w-]{11}$/.test(v.id)&&typeof v.title==='string').map(v=>({...v,_speaker:getSpeaker(v),_series:getSeries(v)}));fillOptions(speaker,videos.map(v=>v._speaker));fillOptions(topic,videos.map(v=>v._series));render()}).catch(()=>{status.textContent='לא ניתן לטעון את ספריית השיעורים כעת.'});
+fetch('./videos.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Video index not available');return r.json()}).then(data=>{if(!Array.isArray(data))throw Error('Invalid video index');videos=data.filter(v=>v&&v.hidden!==true&&typeof v.id==='string'&&/^[\w-]{11}$/.test(v.id)&&typeof v.title==='string').map(v=>({...v,_speakers:getSpeakers(v),_series:getSeries(v)}));fillOptions(speaker,videos.flatMap(v=>v._speakers));fillOptions(topic,videos.map(v=>v._series));render()}).catch(()=>{status.textContent='לא ניתן לטעון את ספריית השיעורים כעת.'});
 </script></body></html>
