@@ -1,3 +1,4 @@
+
 name: Sync YouTube Videos
 
 on:
@@ -24,9 +25,11 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Fetch public uploads
+      - name: Fetch public uploads and admin corrections
         env:
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+          ADMIN_SHEET_URL: ${{ secrets.ADMIN_SHEET_URL }}
+          ADMIN_SYNC_TOKEN: ${{ secrets.ADMIN_SYNC_TOKEN }}
         run: python scripts/sync_videos.py
       - name: Commit updated video index
         run: |
