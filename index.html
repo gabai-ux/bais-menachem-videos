@@ -29,11 +29,11 @@ const knownSpeakers=[
  ['הרב לימא וליהלם',/לימא\s+וליהלם/],
  ['הרב שלום חאריטאנאוו',/שלום\s+חאריטאנאוו/]
 ];
-function canonicalSpeaker(s){const n=norm(s);for(const [name,re] of knownSpeakers)if(re.test(n))return name;return clean(s).replace(/^(?:מפי\s+)?(?:הרב|רבי|רב|ר)\s+/,'').trim()||'לא צוין מגיד שיעור'}
 if (/רמב["״]?ם\s+לעיונא/.test(title)) {
   return 'הרב יעקב פרץ בלומינג';
 }
- function getSpeaker(v){for(const field of [v.speaker,v.rabbi,v.maggid_shiur])if(clean(field))return canonicalSpeaker(field);
+function canonicalSpeaker(s){const n=norm(s);for(const [name,re] of knownSpeakers)if(re.test(n))return name;return clean(s).replace(/^(?:מפי\s+)?(?:הרב|רבי|רב|ר)\s+/,'').trim()||'לא צוין מגיד שיעור'}
+function getSpeaker(v){for(const field of [v.speaker,v.rabbi,v.maggid_shiur])if(clean(field))return canonicalSpeaker(field);
  const title=clean(v.title),n=norm(title);
  for(const [name,re] of knownSpeakers)if(re.test(n))return name;
  // Accept an explicitly labeled speaker in any title segment; do not guess from an unlabeled topic.
