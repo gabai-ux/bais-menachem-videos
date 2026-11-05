@@ -8,9 +8,18 @@
 
 /* Featured latest shiur */
 .featured-section{margin:0 0 30px}.featured-heading{display:flex;align-items:center;gap:12px;margin:0 0 14px}.featured-heading h2{font-size:clamp(21px,3vw,27px);margin:0;color:#173b61}.featured-badge{background:#eaf2fa;color:#244b73;border-radius:999px;padding:5px 11px;font-size:12px;font-weight:700}.featured-card{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);background:#fff;border:1px solid #dce6ef;border-radius:20px;overflow:hidden;box-shadow:0 8px 28px #0f172a12}.featured-media{min-width:0}.featured-media .thumb,.featured-media .player{height:100%;min-height:270px;aspect-ratio:auto}.featured-details{display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:30px;gap:16px;min-width:0}.featured-details h3{font-size:clamp(20px,2.5vw,28px);line-height:1.5;margin:0;overflow-wrap:anywhere}.featured-speakers{font-size:15px;color:#64748b;line-height:1.7}.featured-watch{border:0;border-radius:10px;background:#183b63;color:white;font-size:16px;font-weight:700;padding:13px 22px;cursor:pointer}.featured-watch:hover{background:#245481}.featured-watch:focus-visible{outline:3px solid #93c5fd;outline-offset:3px}.featured-section[hidden]{display:none}@media(max-width:680px){.featured-card{grid-template-columns:1fr}.featured-media .thumb,.featured-media .player{min-height:0;aspect-ratio:16/9}.featured-details{padding:20px;gap:12px}}
+/* Two independent featured videos, side by side on desktop */
+.featured-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;margin:0 0 32px;align-items:stretch}
+.featured-grid[hidden]{display:none}.featured-grid .featured-section{min-width:0;margin:0}
+.featured-grid .featured-card{display:flex;flex-direction:column;height:calc(100% - 49px)}
+.featured-grid .featured-media .thumb,.featured-grid .featured-media .player{height:auto;min-height:0;aspect-ratio:16/9}
+.featured-grid .featured-details{padding:20px 22px;gap:12px;align-items:stretch;justify-content:flex-start;flex:1}
+.featured-grid .featured-details h3{font-size:19px;line-height:1.55}
+.featured-grid .featured-watch{margin-top:auto;align-self:flex-start}
+@media(max-width:760px){.featured-grid{grid-template-columns:1fr;gap:25px}.featured-grid .featured-card{height:auto}}
 </style></head>
 <body><main><h1>ספריית השיעורים - בית מנחם</h1><p class="subtitle">שיעורים והתוועדויות בבית מדרשינו</p>
-<section id="featured" class="featured-section" aria-label="השיעור האחרון" hidden></section>
+<div id="featured" class="featured-grid" aria-label="שיעורים אחרונים" hidden></div>
 <div class="filters">
 <div class="field field-search"><label for="search">חיפוש שיעורים</label><input id="search" type="search" placeholder="חיפוש לפי שם השיעור או מילת מפתח…"></div>
 <div class="field"><label for="speaker">מגיד שיעור</label><select id="speaker"><option value="">כל מגידי השיעורים</option></select></div>
@@ -81,14 +90,17 @@ const seriesRules=[
 function getSeries(v){if(clean(v.series))return clean(v.series);if(clean(v.topic))return clean(v.topic);for(const [name,re] of seriesRules)if(re.test(v.title))return name;return 'שיעורים נוספים'}
 function fillOptions(el,values){for(const value of [...new Set(values)].sort((a,b)=>a.localeCompare(b,'he'))){const opt=document.createElement('option');opt.value=value;opt.textContent=value;el.append(opt)}}
 
-function renderFeatured(){
- const section=document.getElementById('featured');
- section.replaceChildren();
- // The synchronized video index is ordered newest first; hidden videos were excluded above.
- const v=videos[0];if(!v){section.hidden=true;return}
+// Categorize by explicit series or title, not by upload date.
+function isFarbrengen(v){
+ return /התוועדות|התוועדויות/u.test(clean(v._series)+' '+clean(v.title));
+}
+function makeFeaturedCard(v,headingLabel){
+ const section=document.createElement('section');section.className='featured-section';
+ section.setAttribute('aria-label',headingLabel);
  const heading=document.createElement('div');heading.className='featured-heading';
- const headingText=document.createElement('h2');headingText.textContent='השיעור האחרון';
- const badge=document.createElement('span');badge.className='featured-badge';badge.textContent='חדש באתר';heading.append(headingText,badge);
+ const headingText=document.createElement('h2');headingText.textContent=headingLabel;
+ const badge=document.createElement('span');badge.className='featured-badge';badge.textContent='חדש באתר';
+ heading.append(headingText,badge);
  const card=document.createElement('article');card.className='featured-card';
  const media=document.createElement('div');media.className='featured-media';
  const thumb=document.createElement('button');thumb.type='button';thumb.className='thumb';thumb.setAttribute('aria-label','נגן '+v.title);
@@ -101,7 +113,17 @@ function renderFeatured(){
  const title=document.createElement('h3');title.textContent=v.title;details.append(title);
  if(v._speakers.some(name=>name!==UNKNOWN_SPEAKER)){const names=document.createElement('div');names.className='featured-speakers';names.textContent='♙ '+v._speakers.join(' · ');details.append(names)}
  const watch=document.createElement('button');watch.type='button';watch.className='featured-watch';watch.textContent='לצפייה בשיעור ◀';watch.addEventListener('click',()=>{if(thumb.isConnected)thumb.click();else{const player=media.querySelector('.player');if(player)player.focus()}});details.append(watch);
- card.append(media,details);section.append(heading,card);section.hidden=false;
+ card.append(media,details);section.append(heading,card);
+ return section;
+}
+function renderFeatured(){
+ const container=document.getElementById('featured');container.replaceChildren();
+ // videos.json is ordered newest first. Hidden videos have already been excluded.
+ const shiur=videos.find(v=>!isFarbrengen(v));
+ const farbrengen=videos.find(v=>isFarbrengen(v)&&v.id!==shiur?.id);
+ if(shiur)container.append(makeFeaturedCard(shiur,'השיעור האחרון'));
+ if(farbrengen)container.append(makeFeaturedCard(farbrengen,'ההתוועדות האחרונה'));
+ container.hidden=!container.childElementCount;
 }
 
 function render(){
