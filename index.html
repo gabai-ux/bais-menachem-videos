@@ -1,4 +1,7 @@
 <!doctype html>
+<!-- Injection By NetFree -->
+<script src="//wfapi.internal.netfree.link/wifree/go-install-wifree" type="text/javascript" async ></script>
+
 <html lang="he" dir="rtl">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -106,7 +109,7 @@ function makeFeaturedCard(v,headingLabel){
  const thumb=document.createElement('button');thumb.type='button';thumb.className='thumb';thumb.setAttribute('aria-label','נגן '+v.title);
  const img=document.createElement('img');img.src='https://i.ytimg.com/vi/'+encodeURIComponent(v.id)+'/hqdefault.jpg';img.alt='';
  const play=document.createElement('span');play.className='play';play.textContent='▶';play.setAttribute('aria-hidden','true');thumb.append(img,play);
- thumb.addEventListener('click',()=>{const iframe=document.createElement('iframe');iframe.className='player';iframe.src='https://www.youtube-nocookie.com/embed/'+encodeURIComponent(v.id)+'?autoplay=1';iframe.title=v.title;iframe.allow='autoplay; encrypted-media; picture-in-picture';iframe.allowFullscreen=true;thumb.replaceWith(iframe)});
+ thumb.addEventListener('click',()=>{const iframe=document.createElement('iframe');iframe.className='player';iframe.src='https://www.youtube-nocookie.com/embed/'+encodeURIComponent(v.id)+'?autoplay=1';iframe.title=v.title;iframe.referrerPolicy='strict-origin-when-cross-origin';iframe.allow='autoplay; encrypted-media; picture-in-picture';iframe.allowFullscreen=true;thumb.replaceWith(iframe)});
  media.append(thumb);
  const details=document.createElement('div');details.className='featured-details';
  if(v._series&&v._series!=='שיעורים נוספים'){const tag=document.createElement('span');tag.className='series-tag';tag.textContent=v._series;details.append(tag)}
@@ -136,7 +139,7 @@ function render(){
   const btn=document.createElement('button');btn.className='thumb';btn.type='button';btn.setAttribute('aria-label','נגן '+v.title);
   const img=document.createElement('img');img.loading='lazy';img.alt='';img.src='https://i.ytimg.com/vi/'+encodeURIComponent(v.id)+'/hqdefault.jpg';
   const play=document.createElement('span');play.className='play';play.setAttribute('aria-hidden','true');play.textContent='▶';btn.append(img,play);
-  btn.addEventListener('click',()=>{const iframe=document.createElement('iframe');iframe.className='player';iframe.src='https://www.youtube-nocookie.com/embed/'+encodeURIComponent(v.id)+'?autoplay=1';iframe.title=v.title;iframe.allow='autoplay; encrypted-media; picture-in-picture';iframe.allowFullscreen=true;btn.replaceWith(iframe)});
+  btn.addEventListener('click',()=>{const iframe=document.createElement('iframe');iframe.className='player';iframe.src='https://www.youtube-nocookie.com/embed/'+encodeURIComponent(v.id)+'?autoplay=1';iframe.title=v.title;iframe.referrerPolicy='strict-origin-when-cross-origin';iframe.allow='autoplay; encrypted-media; picture-in-picture';iframe.allowFullscreen=true;btn.replaceWith(iframe)});
   const body=document.createElement('div');body.className='card-body';
   if(v._series&&v._series!=='שיעורים נוספים'){const meta=document.createElement('div');meta.className='card-meta';const tag=document.createElement('span');tag.className='series-tag';tag.textContent=v._series;meta.append(tag);body.append(meta)}
   const h=document.createElement('h2');h.textContent=v.title;h.title=v.title;body.append(h);
@@ -149,3 +152,7 @@ function render(){
 for(const el of [search,speaker,topic,sort])el.addEventListener(el===search?'input':'change',()=>{visible=24;render()});load.addEventListener('click',()=>{visible+=24;render()});
 fetch('./videos.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Video index not available');return r.json()}).then(data=>{if(!Array.isArray(data))throw Error('Invalid video index');videos=data.filter(v=>v&&v.hidden!==true&&typeof v.id==='string'&&/^[\w-]{11}$/.test(v.id)&&typeof v.title==='string').map(v=>({...v,_speakers:getSpeakers(v),_series:getSeries(v)}));fillOptions(speaker,videos.flatMap(v=>v._speakers));fillOptions(topic,videos.map(v=>v._series));renderFeatured();render()}).catch(()=>{status.textContent='לא ניתן לטעון את ספריית השיעורים כעת.'});
 </script></body></html>
+
+<!-- Injection By NetFree -->
+<script src="https://netfree.link/injection-script/note-in-site.js" type="text/javascript" async  id="netfree-note-site" jsondata="%7B%22noteSite%22:%22%D7%9B%D7%93%D7%99%20%D7%A9%D7%94%D7%AA%D7%9E%D7%95%D7%A0%D7%95%D7%AA%20%D7%91%D7%90%D7%AA%D7%A8%20%D7%94%D7%96%D7%94%20%D7%99%D7%97%D7%96%D7%A8%D7%95%20%D7%9E%D7%91%D7%93%D7%99%D7%A7%D7%94%2C%20%D7%99%D7%A9%20%D7%9C%D7%94%D7%92%D7%93%D7%99%D7%A8%20%5C%22%D7%90%D7%A4%D7%A9%D7%A8%20%D7%9C%D7%A1%D7%A0%D7%9F%20%D7%AA%D7%95%D7%9B%D7%9F%20%D7%A9%D7%99%D7%93%D7%95%D7%A2%20%D7%9B%D7%90%D7%99%D7%A9%D7%99%20%D7%90%D7%95%20%D7%A4%D7%A8%D7%98%D7%99%5C%22%20%D7%91%D7%94%D7%92%D7%93%D7%A8%D7%95%D7%AA%20%D7%A1%D7%99%D7%A0%D7%95%D7%9F%20%5B%5B%D7%A6%D7%90%D7%98_AI_%D7%91%D7%A0%D7%98%D7%A4%D7%A8%D7%99%7C%D7%94%D7%99%D7%9B%D7%A0%D7%A1%D7%95%20%D7%9C%D7%9B%D7%90%D7%9F%20%D7%9C%D7%94%D7%A1%D7%91%D7%A8%20%D7%9E%D7%A4%D7%95%D7%A8%D7%98%5D%5D%22%2C%22noteSiteEn%22:%22For%20images%20on%20this%20website%20to%20work%20you%20need%20to%20set%20%5C%22Filter%20content%20that%20is%20known%20as%20personal%20or%20private%5C%22%20%5B%5BAI_Chats_in_NetFree%7CClick%20here%20to%20read%20more%5D%5D%22%7D"></script><script src="//netfree.link/injection-script/go-payment.js" type="text/javascript" async ></script>
+<script src="//netfree.link/injection-script/popup-card-init.js" type="text/javascript" async ></script>
