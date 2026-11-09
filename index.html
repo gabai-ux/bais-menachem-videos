@@ -22,9 +22,13 @@
 .player-shell{position:relative;width:100%;aspect-ratio:16/9;background:#0f172a}
 .player-shell .player{width:100%;height:100%;aspect-ratio:auto;display:block}
 .player-expand{position:absolute;top:9px;left:9px;z-index:2;border:0;border-radius:8px;background:#fff;color:#173b61;padding:8px 12px;font:700 13px Arial,Helvetica,sans-serif;cursor:pointer;box-shadow:0 2px 10px #0005}
-.player-shell.expanded{position:fixed!important;inset:0!important;width:100vw!important;height:100dvh!important;aspect-ratio:auto!important;z-index:2147483647!important;background:#080e18;display:flex;align-items:center;justify-content:center;padding:0}
-.player-shell.expanded .player{flex:none;width:min(85vw,calc(70dvh * 16 / 9));height:auto;aspect-ratio:16/9;max-width:85vw;max-height:70dvh}
-.player-shell.expanded .player-expand{top:8px;left:12px}
+.card.inline-expanded{grid-column:1/-1}
+.card.inline-expanded .player-shell{max-width:850px;margin-inline:auto}
+.featured-section.inline-expanded{grid-column:1/-1}
+.featured-section.inline-expanded .featured-card{max-width:900px;margin-inline:auto}
+.player-shell.expanded{position:relative;width:100%;height:auto;aspect-ratio:16/9;background:#0f172a;z-index:auto;padding:0}
+.player-shell.expanded .player{width:100%;height:100%;aspect-ratio:auto;max-width:none;max-height:none}
+.player-shell.expanded .player-expand{top:9px;left:9px}
 .featured-grid .featured-media .player-shell{height:auto;min-height:0;aspect-ratio:16/9}
 </style></head>
 <body><main><h1>ספריית השיעורים - בית מנחם</h1><p class="subtitle">שיעורים והתוועדויות בבית מדרשינו</p>
@@ -112,10 +116,14 @@ function openVideoPlayer(button,v){
  iframe.title=v.title;iframe.referrerPolicy='strict-origin-when-cross-origin';
  iframe.allow='autoplay; encrypted-media; fullscreen; picture-in-picture';iframe.allowFullscreen=true;
  const expand=document.createElement('button');expand.type='button';expand.className='player-expand';
- expand.textContent='⛶ הגדל נגן';expand.setAttribute('aria-pressed','false');
+ expand.textContent='⛶ Expand Player';expand.setAttribute('aria-pressed','false');
  expand.addEventListener('click',()=>{
   const enlarged=shell.classList.toggle('expanded');
-  expand.textContent=enlarged?'✕ סגור הגדלה':'⛶ הגדל נגן';
+  const card=shell.closest('.card');
+  const featured=shell.closest('.featured-section');
+  if(card)card.classList.toggle('inline-expanded',enlarged);
+  if(featured)featured.classList.toggle('inline-expanded',enlarged);
+  expand.textContent=enlarged?'✕ Close Expanded Player':'⛶ Expand Player';
   expand.setAttribute('aria-pressed',String(enlarged));
  });
  shell.append(iframe,expand);button.replaceWith(shell);
