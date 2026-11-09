@@ -1,7 +1,4 @@
 <!doctype html>
-<!-- Injection By NetFree -->
-<script src="//wfapi.internal.netfree.link/wifree/go-install-wifree" type="text/javascript" async ></script>
-
 <html lang="he" dir="rtl">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -25,8 +22,8 @@
 .player-shell{position:relative;width:100%;aspect-ratio:16/9;background:#0f172a}
 .player-shell .player{width:100%;height:100%;aspect-ratio:auto;display:block}
 .player-expand{position:absolute;top:9px;left:9px;z-index:2;border:0;border-radius:8px;background:#fff;color:#173b61;padding:8px 12px;font:700 13px Arial,Helvetica,sans-serif;cursor:pointer;box-shadow:0 2px 10px #0005}
-.player-shell.expanded{position:fixed!important;inset:0!important;width:100vw!important;height:100vh!important;height:100dvh!important;aspect-ratio:auto!important;z-index:2147483647!important;background:#080e18;display:flex;align-items:center;justify-content:center;padding:45px 8px 8px}
-.player-shell.expanded .player{width:100%;height:100%;max-height:calc(100dvh - 53px);aspect-ratio:auto}
+.player-shell.expanded{position:fixed!important;inset:0!important;width:100vw!important;height:100dvh!important;aspect-ratio:auto!important;z-index:2147483647!important;background:#080e18;display:flex;align-items:center;justify-content:center;padding:0}
+.player-shell.expanded .player{flex:none;width:min(85vw,calc(70dvh * 16 / 9));height:auto;aspect-ratio:16/9;max-width:85vw;max-height:70dvh}
 .player-shell.expanded .player-expand{top:8px;left:12px}
 .featured-grid .featured-media .player-shell{height:auto;min-height:0;aspect-ratio:16/9}
 </style></head>
@@ -179,7 +176,3 @@ function render(){
 for(const el of [search,speaker,topic,sort])el.addEventListener(el===search?'input':'change',()=>{visible=24;render()});load.addEventListener('click',()=>{visible+=24;render()});
 fetch('./videos.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Video index not available');return r.json()}).then(data=>{if(!Array.isArray(data))throw Error('Invalid video index');videos=data.filter(v=>v&&v.hidden!==true&&typeof v.id==='string'&&/^[\w-]{11}$/.test(v.id)&&typeof v.title==='string').map(v=>({...v,_speakers:getSpeakers(v),_series:getSeries(v)}));fillOptions(speaker,videos.flatMap(v=>v._speakers));fillOptions(topic,videos.map(v=>v._series));renderFeatured();render()}).catch(()=>{status.textContent='לא ניתן לטעון את ספריית השיעורים כעת.'});
 </script></body></html>
-
-<!-- Injection By NetFree -->
-<script src="https://netfree.link/injection-script/note-in-site.js" type="text/javascript" async  id="netfree-note-site" jsondata="%7B%22noteSite%22:%22%D7%9B%D7%93%D7%99%20%D7%A9%D7%94%D7%AA%D7%9E%D7%95%D7%A0%D7%95%D7%AA%20%D7%91%D7%90%D7%AA%D7%A8%20%D7%94%D7%96%D7%94%20%D7%99%D7%97%D7%96%D7%A8%D7%95%20%D7%9E%D7%91%D7%93%D7%99%D7%A7%D7%94%2C%20%D7%99%D7%A9%20%D7%9C%D7%94%D7%92%D7%93%D7%99%D7%A8%20%5C%22%D7%90%D7%A4%D7%A9%D7%A8%20%D7%9C%D7%A1%D7%A0%D7%9F%20%D7%AA%D7%95%D7%9B%D7%9F%20%D7%A9%D7%99%D7%93%D7%95%D7%A2%20%D7%9B%D7%90%D7%99%D7%A9%D7%99%20%D7%90%D7%95%20%D7%A4%D7%A8%D7%98%D7%99%5C%22%20%D7%91%D7%94%D7%92%D7%93%D7%A8%D7%95%D7%AA%20%D7%A1%D7%99%D7%A0%D7%95%D7%9F%20%5B%5B%D7%A6%D7%90%D7%98_AI_%D7%91%D7%A0%D7%98%D7%A4%D7%A8%D7%99%7C%D7%94%D7%99%D7%9B%D7%A0%D7%A1%D7%95%20%D7%9C%D7%9B%D7%90%D7%9F%20%D7%9C%D7%94%D7%A1%D7%91%D7%A8%20%D7%9E%D7%A4%D7%95%D7%A8%D7%98%5D%5D%22%2C%22noteSiteEn%22:%22For%20images%20on%20this%20website%20to%20work%20you%20need%20to%20set%20%5C%22Filter%20content%20that%20is%20known%20as%20personal%20or%20private%5C%22%20%5B%5BAI_Chats_in_NetFree%7CClick%20here%20to%20read%20more%5D%5D%22%7D"></script><script src="//netfree.link/injection-script/go-payment.js" type="text/javascript" async ></script>
-<script src="//netfree.link/injection-script/popup-card-init.js" type="text/javascript" async ></script>
