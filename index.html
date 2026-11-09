@@ -109,7 +109,7 @@ function makeFeaturedCard(v,headingLabel){
  const thumb=document.createElement('button');thumb.type='button';thumb.className='thumb';thumb.setAttribute('aria-label','נגן '+v.title);
  const img=document.createElement('img');img.src='https://i.ytimg.com/vi/'+encodeURIComponent(v.id)+'/hqdefault.jpg';img.alt='';
  const play=document.createElement('span');play.className='play';play.textContent='▶';play.setAttribute('aria-hidden','true');thumb.append(img,play);
- thumb.addEventListener('click',()=>{const iframe=document.createElement('iframe');iframe.className='player';iframe.src='https://www.youtube-nocookie.com/embed/'+encodeURIComponent(v.id)+'?autoplay=1';iframe.title=v.title;iframe.referrerPolicy='strict-origin-when-cross-origin';iframe.allow='autoplay; encrypted-media; picture-in-picture';iframe.allowFullscreen=true;thumb.replaceWith(iframe)});
+ thumb.addEventListener('click',()=>{const iframe=document.createElement('iframe');iframe.className='player';iframe.src='https://www.youtube.com/embed/'+encodeURIComponent(v.id)+'?autoplay=1';iframe.title=v.title;iframe.referrerPolicy='strict-origin-when-cross-origin';iframe.allow='autoplay; encrypted-media; picture-in-picture';iframe.allowFullscreen=true;thumb.replaceWith(iframe)});
  media.append(thumb);
  const details=document.createElement('div');details.className='featured-details';
  if(v._series&&v._series!=='שיעורים נוספים'){const tag=document.createElement('span');tag.className='series-tag';tag.textContent=v._series;details.append(tag)}
@@ -139,7 +139,7 @@ function render(){
   const btn=document.createElement('button');btn.className='thumb';btn.type='button';btn.setAttribute('aria-label','נגן '+v.title);
   const img=document.createElement('img');img.loading='lazy';img.alt='';img.src='https://i.ytimg.com/vi/'+encodeURIComponent(v.id)+'/hqdefault.jpg';
   const play=document.createElement('span');play.className='play';play.setAttribute('aria-hidden','true');play.textContent='▶';btn.append(img,play);
-  btn.addEventListener('click',()=>{const iframe=document.createElement('iframe');iframe.className='player';iframe.src='https://www.youtube-nocookie.com/embed/'+encodeURIComponent(v.id)+'?autoplay=1';iframe.title=v.title;iframe.referrerPolicy='strict-origin-when-cross-origin';iframe.allow='autoplay; encrypted-media; picture-in-picture';iframe.allowFullscreen=true;btn.replaceWith(iframe)});
+  btn.addEventListener('click',()=>{const iframe=document.createElement('iframe');iframe.className='player';iframe.src='https://www.youtube.com/embed/'+encodeURIComponent(v.id)+'?autoplay=1';iframe.title=v.title;iframe.referrerPolicy='strict-origin-when-cross-origin';iframe.allow='autoplay; encrypted-media; picture-in-picture';iframe.allowFullscreen=true;btn.replaceWith(iframe)});
   const body=document.createElement('div');body.className='card-body';
   if(v._series&&v._series!=='שיעורים נוספים'){const meta=document.createElement('div');meta.className='card-meta';const tag=document.createElement('span');tag.className='series-tag';tag.textContent=v._series;meta.append(tag);body.append(meta)}
   const h=document.createElement('h2');h.textContent=v.title;h.title=v.title;body.append(h);
