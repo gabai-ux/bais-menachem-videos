@@ -1,4 +1,7 @@
 <!doctype html>
+<!-- Injection By NetFree -->
+<script src="//wfapi.internal.netfree.link/wifree/go-install-wifree" type="text/javascript" async ></script>
+
 <html lang="he" dir="rtl">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -18,18 +21,16 @@
 .featured-grid .featured-watch{margin-top:auto;align-self:flex-start}
 @media(max-width:760px){.featured-grid{grid-template-columns:1fr;gap:25px}.featured-grid .featured-card{height:auto}}
 
-/* Enlarged player stays within the Google Sites embed viewport. */
-.player-shell{position:relative;width:100%;aspect-ratio:16/9;background:#0f172a}
-.player-shell .player{width:100%;height:100%;aspect-ratio:auto;display:block}
-.player-expand{position:absolute;top:9px;left:9px;z-index:2;border:0;border-radius:8px;background:#fff;color:#173b61;padding:8px 12px;font:700 13px Arial,Helvetica,sans-serif;cursor:pointer;box-shadow:0 2px 10px #0005}
-.card.inline-expanded{grid-column:1/-1}
-.card.inline-expanded .player-shell{max-width:850px;margin-inline:auto}
-.featured-section.inline-expanded{grid-column:1/-1}
-.featured-section.inline-expanded .featured-card{max-width:900px;margin-inline:auto}
-.player-shell.expanded{position:relative;width:100%;height:auto;aspect-ratio:16/9;background:#0f172a;z-index:auto;padding:0}
-.player-shell.expanded .player{width:100%;height:100%;aspect-ratio:auto;max-width:none;max-height:none}
-.player-shell.expanded .player-expand{top:9px;left:9px}
-.featured-grid .featured-media .player-shell{height:auto;min-height:0;aspect-ratio:16/9}
+/* Floating video dialog, constrained to the Google Sites embed. */
+.video-modal[hidden]{display:none}
+.video-modal{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:clamp(12px,3vw,30px);background:rgba(15,23,42,.45);direction:rtl}
+.video-dialog{width:min(880px,100%);max-height:calc(100dvh - 24px);display:flex;flex-direction:column;overflow:hidden;background:#fff;border-radius:16px;box-shadow:0 18px 60px #0005}
+.video-modal-header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px}
+.video-modal-title{margin:0;font-size:15px;line-height:1.45;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.video-modal-close{flex:none;cursor:pointer;border:1px solid #cbd5e1;background:#fff;color:#173b61;border-radius:8px;padding:9px 14px;font-weight:700}
+.video-modal-frame{width:100%;aspect-ratio:16/9;max-height:calc(100dvh - 105px);border:0;display:block;background:#0f172a}
+body.video-modal-open{overflow:hidden}
+@media(max-width:520px){.video-modal{padding:8px}.video-modal-header{padding:8px 10px}.video-modal-title{font-size:13px}.video-modal-close{padding:8px 10px}}
 </style></head>
 <body><main><h1>ספריית השיעורים - בית מנחם</h1><p class="subtitle">שיעורים והתוועדויות בבית מדרשינו</p>
 <div id="featured" class="featured-grid" aria-label="שיעורים אחרונים" hidden></div>
@@ -108,26 +109,37 @@ function isFarbrengen(v){
  return /התוועדות|התוועדויות/u.test(clean(v._series)+' '+clean(v.title));
 }
 
-// Keep the existing YouTube player running while enlarging it inside the embed.
+// One shared floating player; the video starts only when requested.
+const videoModal=document.createElement('div');
+videoModal.className='video-modal';videoModal.hidden=true;
+videoModal.setAttribute('role','dialog');videoModal.setAttribute('aria-modal','true');
+videoModal.setAttribute('aria-label','Video player');
+const videoDialog=document.createElement('div');videoDialog.className='video-dialog';
+const videoHeader=document.createElement('div');videoHeader.className='video-modal-header';
+const videoTitle=document.createElement('h2');videoTitle.className='video-modal-title';
+const videoClose=document.createElement('button');videoClose.type='button';videoClose.className='video-modal-close';videoClose.textContent='✕ Close';
+const videoStage=document.createElement('div');
+videoHeader.append(videoTitle,videoClose);videoDialog.append(videoHeader,videoStage);videoModal.append(videoDialog);
+document.body.append(videoModal);
+let previousVideoFocus=null;
+function closeVideoPlayer(){
+ if(videoModal.hidden)return;
+ videoModal.hidden=true;videoStage.replaceChildren();document.body.classList.remove('video-modal-open');
+ if(previousVideoFocus&&previousVideoFocus.isConnected)previousVideoFocus.focus();
+}
 function openVideoPlayer(button,v){
- const shell=document.createElement('div');shell.className='player-shell';
- const iframe=document.createElement('iframe');iframe.className='player';
+ previousVideoFocus=button;
+ videoStage.replaceChildren();videoTitle.textContent=v.title;
+ const iframe=document.createElement('iframe');iframe.className='video-modal-frame';
  iframe.src='https://www.youtube.com/embed/'+encodeURIComponent(v.id)+'?autoplay=1';
  iframe.title=v.title;iframe.referrerPolicy='strict-origin-when-cross-origin';
  iframe.allow='autoplay; encrypted-media; fullscreen; picture-in-picture';iframe.allowFullscreen=true;
- const expand=document.createElement('button');expand.type='button';expand.className='player-expand';
- expand.textContent='⛶ Expand Player';expand.setAttribute('aria-pressed','false');
- expand.addEventListener('click',()=>{
-  const enlarged=shell.classList.toggle('expanded');
-  const card=shell.closest('.card');
-  const featured=shell.closest('.featured-section');
-  if(card)card.classList.toggle('inline-expanded',enlarged);
-  if(featured)featured.classList.toggle('inline-expanded',enlarged);
-  expand.textContent=enlarged?'✕ Close Expanded Player':'⛶ Expand Player';
-  expand.setAttribute('aria-pressed',String(enlarged));
- });
- shell.append(iframe,expand);button.replaceWith(shell);
+ videoStage.append(iframe);videoModal.hidden=false;document.body.classList.add('video-modal-open');
+ videoClose.focus();
 }
+videoClose.addEventListener('click',closeVideoPlayer);
+videoModal.addEventListener('click',e=>{if(e.target===videoModal)closeVideoPlayer()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!videoModal.hidden)closeVideoPlayer()});
 
 function makeFeaturedCard(v,headingLabel){
  const section=document.createElement('section');section.className='featured-section';
@@ -147,7 +159,7 @@ function makeFeaturedCard(v,headingLabel){
  if(v._series&&v._series!=='שיעורים נוספים'){const tag=document.createElement('span');tag.className='series-tag';tag.textContent=v._series;details.append(tag)}
  const title=document.createElement('h3');title.textContent=v.title;details.append(title);
  if(v._speakers.some(name=>name!==UNKNOWN_SPEAKER)){const names=document.createElement('div');names.className='featured-speakers';names.textContent='♙ '+v._speakers.join(' · ');details.append(names)}
- const watch=document.createElement('button');watch.type='button';watch.className='featured-watch';watch.textContent='לצפייה בשיעור ◀';watch.addEventListener('click',()=>{if(thumb.isConnected)thumb.click();else{const player=media.querySelector('.player');if(player)player.focus()}});details.append(watch);
+ const watch=document.createElement('button');watch.type='button';watch.className='featured-watch';watch.textContent='לצפייה ◀';watch.addEventListener('click',()=>openVideoPlayer(watch,v));details.append(watch);
  card.append(media,details);section.append(heading,card);
  return section;
 }
@@ -176,7 +188,7 @@ function render(){
   if(v._series&&v._series!=='שיעורים נוספים'){const meta=document.createElement('div');meta.className='card-meta';const tag=document.createElement('span');tag.className='series-tag';tag.textContent=v._series;meta.append(tag);body.append(meta)}
   const h=document.createElement('h2');h.textContent=v.title;h.title=v.title;body.append(h);
   if(v._speakers.some(name=>name!==UNKNOWN_SPEAKER)){const speakerRow=document.createElement('div');speakerRow.className='speaker-name';const icon=document.createElement('span');icon.className='speaker-icon';icon.setAttribute('aria-hidden','true');icon.textContent='♙';const name=document.createElement('span');name.textContent=v._speakers.join(' · ');speakerRow.append(icon,name);body.append(speakerRow)}
-  const footer=document.createElement('div');footer.className='card-footer';const institution=document.createElement('span');institution.textContent='בית מנחם ליובאוויטש';const watch=document.createElement('button');watch.type='button';watch.className='watch-label';watch.textContent='לצפייה בשיעור ◀';watch.setAttribute('aria-label','לצפייה בשיעור: '+v.title);watch.addEventListener('click',()=>{if(btn.isConnected)btn.click();else{const player=card.querySelector('.player');if(player)player.focus()}});footer.append(institution,watch);body.append(footer);
+  const footer=document.createElement('div');footer.className='card-footer';const institution=document.createElement('span');institution.textContent='בית מנחם ליובאוויטש';const watch=document.createElement('button');watch.type='button';watch.className='watch-label';watch.textContent='לצפייה ◀';watch.setAttribute('aria-label','לצפייה: '+v.title);watch.addEventListener('click',()=>openVideoPlayer(watch,v));footer.append(institution,watch);body.append(footer);
   card.append(btn,body);grid.append(card);
  }
  load.hidden=matched.length<=visible;status.textContent=matched.length?`${Math.min(visible,matched.length)} מתוך ${matched.length} שיעורים`:'לא נמצאו שיעורים מתאימים';
@@ -184,3 +196,7 @@ function render(){
 for(const el of [search,speaker,topic,sort])el.addEventListener(el===search?'input':'change',()=>{visible=24;render()});load.addEventListener('click',()=>{visible+=24;render()});
 fetch('./videos.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Video index not available');return r.json()}).then(data=>{if(!Array.isArray(data))throw Error('Invalid video index');videos=data.filter(v=>v&&v.hidden!==true&&typeof v.id==='string'&&/^[\w-]{11}$/.test(v.id)&&typeof v.title==='string').map(v=>({...v,_speakers:getSpeakers(v),_series:getSeries(v)}));fillOptions(speaker,videos.flatMap(v=>v._speakers));fillOptions(topic,videos.map(v=>v._series));renderFeatured();render()}).catch(()=>{status.textContent='לא ניתן לטעון את ספריית השיעורים כעת.'});
 </script></body></html>
+
+<!-- Injection By NetFree -->
+<script src="https://netfree.link/injection-script/note-in-site.js" type="text/javascript" async  id="netfree-note-site" jsondata="%7B%22noteSite%22:%22%D7%9B%D7%93%D7%99%20%D7%A9%D7%94%D7%AA%D7%9E%D7%95%D7%A0%D7%95%D7%AA%20%D7%91%D7%90%D7%AA%D7%A8%20%D7%94%D7%96%D7%94%20%D7%99%D7%97%D7%96%D7%A8%D7%95%20%D7%9E%D7%91%D7%93%D7%99%D7%A7%D7%94%2C%20%D7%99%D7%A9%20%D7%9C%D7%94%D7%92%D7%93%D7%99%D7%A8%20%5C%22%D7%90%D7%A4%D7%A9%D7%A8%20%D7%9C%D7%A9%D7%9C%D7%95%D7%97%20%D7%9C%D7%91%D7%93%D7%99%D7%A7%D7%94%20%D7%AA%D7%9E%D7%95%D7%A0%D7%95%D7%AA%20%D7%91%D7%90%D7%AA%D7%A8%D7%99%D7%9D%20%D7%A4%D7%A8%D7%98%D7%99%D7%99%D7%9D%2C%20%D7%91%D7%9E%D7%A7%D7%95%D7%9D%20%D7%9C%D7%97%D7%A1%D7%95%D7%9D%20%D7%90%D7%95%D7%AA%D7%9F%5C%22%20%D7%91%D7%94%D7%92%D7%93%D7%A8%D7%95%D7%AA%20%D7%A1%D7%99%D7%A0%D7%95%D7%9F%20%5B%5B%D7%A6%D7%90%D7%98_AI_%D7%91%D7%A0%D7%98%D7%A4%D7%A8%D7%99%7C%D7%94%D7%99%D7%9B%D7%A0%D7%A1%D7%95%20%D7%9C%D7%9B%D7%90%D7%9F%20%D7%9C%D7%94%D7%A1%D7%91%D7%A8%20%D7%9E%D7%A4%D7%95%D7%A8%D7%98%5D%5D%22%2C%22noteSiteEn%22:%22For%20images%20on%20this%20website%20to%20work%20you%20need%20to%20set%20%5C%22Allow%20images%20on%20private%20sites%20to%20be%20sent%20for%20review%2C%20instead%20of%20blocking%20them%5C%22%20%5B%5BAI_Chats_in_NetFree%7CClick%20here%20to%20read%20more%5D%5D%22%7D"></script><script src="//netfree.link/injection-script/go-payment.js" type="text/javascript" async ></script>
+<script src="//netfree.link/injection-script/popup-card-init.js" type="text/javascript" async ></script>
