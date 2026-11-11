@@ -31,7 +31,7 @@
 .video-modal-close{flex:none;cursor:pointer;border:1px solid #cbd5e1;background:#fff;color:#173b61;border-radius:8px;padding:9px 14px;font-weight:700}
 .video-modal-frame{width:100%;aspect-ratio:16/9;max-height:calc(100dvh - 105px);border:0;display:block;background:#0f172a}
 body.video-modal-open{overflow:hidden}
-@media(max-width:520px){.video-modal{padding:8px}.video-modal-header{padding:8px 10px}.video-modal-title{font-size:13px}.video-modal-close{padding:8px 10px}}
+@media(max-width:520px){.video-modal{position:absolute;inset:0;height:100%;align-items:flex-start;padding:var(--mobile-player-top,12px) 8px 8px}.video-dialog{max-height:min(75dvh,450px)}body.video-modal-open{overflow:visible}.video-modal-header{padding:8px 10px}.video-modal-title{font-size:13px}.video-modal-close{padding:8px 10px}}
 </style></head>
 <body><main><h1>ספריית השיעורים - בית מנחם</h1><p class="subtitle">שיעורים והתוועדויות בבית מדרשינו</p>
 <div id="featured" class="featured-grid" aria-label="שיעורים אחרונים" hidden></div>
@@ -130,13 +130,25 @@ function closeVideoPlayer(){
 }
 function openVideoPlayer(button,v){
  previousVideoFocus=button;
+ // Google Sites may show only part of a tall iframe on mobile.
+ // Position the player at the tapped card instead of the iframe's top.
+ if(window.matchMedia('(max-width:520px)').matches){
+  const tappedTop=button.getBoundingClientRect().top+window.scrollY;
+  const dialogHeight=Math.min(window.innerWidth*9/16+60,450);
+  const pageHeight=Math.max(document.documentElement.scrollHeight,document.body.scrollHeight);
+  const top=Math.max(8,Math.min(tappedTop-12,pageHeight-dialogHeight-12));
+  videoModal.style.setProperty('--mobile-player-top',top+'px');
+ }else videoModal.style.removeProperty('--mobile-player-top');
  videoStage.replaceChildren();videoTitle.textContent=v.title;
  const iframe=document.createElement('iframe');iframe.className='video-modal-frame';
  iframe.src='https://www.youtube.com/embed/'+encodeURIComponent(v.id)+'?autoplay=1';
  iframe.title=v.title;iframe.referrerPolicy='strict-origin-when-cross-origin';
  iframe.allow='autoplay; encrypted-media; fullscreen; picture-in-picture';iframe.allowFullscreen=true;
  videoStage.append(iframe);videoModal.hidden=false;document.body.classList.add('video-modal-open');
- videoClose.focus();
+ videoClose.focus({preventScroll:true});
+ if(window.matchMedia('(max-width:520px)').matches){
+  requestAnimationFrame(()=>videoDialog.scrollIntoView({block:'start',behavior:'instant'}));
+ }
 }
 videoClose.addEventListener('click',closeVideoPlayer);
 videoModal.addEventListener('click',e=>{if(e.target===videoModal)closeVideoPlayer()});
