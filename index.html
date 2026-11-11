@@ -2,6 +2,7 @@
 <!-- Injection By NetFree -->
 <script src="//wfapi.internal.netfree.link/wifree/go-install-wifree" type="text/javascript" async ></script>
 
+
 <html lang="he" dir="rtl">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
@@ -23,7 +24,7 @@
 
 /* Floating video dialog, constrained to the Google Sites embed. */
 .video-modal[hidden]{display:none}
-.video-modal{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:clamp(12px,3vw,30px);background:rgba(15,23,42,.45);direction:rtl}
+.video-modal{position:fixed;inset:0;z-index:9999;display:flex;align-items:flex-start;justify-content:center;padding:30px clamp(12px,3vw,30px) 12px;background:rgba(15,23,42,.45);direction:rtl}
 .video-dialog{width:min(880px,100%);max-height:calc(100dvh - 24px);display:flex;flex-direction:column;overflow:hidden;background:#fff;border-radius:16px;box-shadow:0 18px 60px #0005}
 .video-modal-header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px}
 .video-modal-title{margin:0;font-size:15px;line-height:1.45;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
@@ -196,6 +197,7 @@ function render(){
 for(const el of [search,speaker,topic,sort])el.addEventListener(el===search?'input':'change',()=>{visible=24;render()});load.addEventListener('click',()=>{visible+=24;render()});
 fetch('./videos.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Video index not available');return r.json()}).then(data=>{if(!Array.isArray(data))throw Error('Invalid video index');videos=data.filter(v=>v&&v.hidden!==true&&typeof v.id==='string'&&/^[\w-]{11}$/.test(v.id)&&typeof v.title==='string').map(v=>({...v,_speakers:getSpeakers(v),_series:getSeries(v)}));fillOptions(speaker,videos.flatMap(v=>v._speakers));fillOptions(topic,videos.map(v=>v._series));renderFeatured();render()}).catch(()=>{status.textContent='לא ניתן לטעון את ספריית השיעורים כעת.'});
 </script></body></html>
+
 
 <!-- Injection By NetFree -->
 <script src="https://netfree.link/injection-script/note-in-site.js" type="text/javascript" async  id="netfree-note-site" jsondata="%7B%22noteSite%22:%22%D7%9B%D7%93%D7%99%20%D7%A9%D7%94%D7%AA%D7%9E%D7%95%D7%A0%D7%95%D7%AA%20%D7%91%D7%90%D7%AA%D7%A8%20%D7%94%D7%96%D7%94%20%D7%99%D7%97%D7%96%D7%A8%D7%95%20%D7%9E%D7%91%D7%93%D7%99%D7%A7%D7%94%2C%20%D7%99%D7%A9%20%D7%9C%D7%94%D7%92%D7%93%D7%99%D7%A8%20%5C%22%D7%90%D7%A4%D7%A9%D7%A8%20%D7%9C%D7%A9%D7%9C%D7%95%D7%97%20%D7%9C%D7%91%D7%93%D7%99%D7%A7%D7%94%20%D7%AA%D7%9E%D7%95%D7%A0%D7%95%D7%AA%20%D7%91%D7%90%D7%AA%D7%A8%D7%99%D7%9D%20%D7%A4%D7%A8%D7%98%D7%99%D7%99%D7%9D%2C%20%D7%91%D7%9E%D7%A7%D7%95%D7%9D%20%D7%9C%D7%97%D7%A1%D7%95%D7%9D%20%D7%90%D7%95%D7%AA%D7%9F%5C%22%20%D7%91%D7%94%D7%92%D7%93%D7%A8%D7%95%D7%AA%20%D7%A1%D7%99%D7%A0%D7%95%D7%9F%20%5B%5B%D7%A6%D7%90%D7%98_AI_%D7%91%D7%A0%D7%98%D7%A4%D7%A8%D7%99%7C%D7%94%D7%99%D7%9B%D7%A0%D7%A1%D7%95%20%D7%9C%D7%9B%D7%90%D7%9F%20%D7%9C%D7%94%D7%A1%D7%91%D7%A8%20%D7%9E%D7%A4%D7%95%D7%A8%D7%98%5D%5D%22%2C%22noteSiteEn%22:%22For%20images%20on%20this%20website%20to%20work%20you%20need%20to%20set%20%5C%22Allow%20images%20on%20private%20sites%20to%20be%20sent%20for%20review%2C%20instead%20of%20blocking%20them%5C%22%20%5B%5BAI_Chats_in_NetFree%7CClick%20here%20to%20read%20more%5D%5D%22%7D"></script><script src="//netfree.link/injection-script/go-payment.js" type="text/javascript" async ></script>
