@@ -1,0 +1,273 @@
+<!doctype html>
+
+
+
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ספריית השיעורים - בית מנחם</title>
+<style>
+:root{font-family:Arial,Helvetica,sans-serif;color:#1e293b;background:#f8fafc}*{box-sizing:border-box}body{margin:0}main{max-width:1200px;margin:auto;padding:32px 16px 60px}h1{text-align:center;font-size:clamp(25px,4vw,38px);margin:12px 0 8px}.subtitle{text-align:center;color:#64748b;margin:0 0 30px}.filters{display:grid;grid-template-columns:2fr repeat(3,minmax(0,1fr));gap:12px;margin:0 0 28px;align-items:end}.field label{display:block;font-size:13px;font-weight:600;margin:0 0 6px}.field input,.field select{width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:10px;font-size:15px;background:#fff;color:#1e293b;min-width:0}.field input:focus-visible,.field select:focus-visible,.thumb:focus-visible,#load:focus-visible{outline:3px solid #93c5fd;outline-offset:3px}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:22px}.card{min-width:0;background:#fff;border:1px solid #e2e8f0;border-radius:17px;overflow:hidden;box-shadow:0 3px 12px #0f172a0a;transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;display:flex;flex-direction:column}.card:hover{transform:translateY(-3px);box-shadow:0 12px 28px #0f172a18;border-color:#cbd5e1}.thumb{position:relative;width:100%;aspect-ratio:16/9;background:#0f172a;border:0;padding:0;cursor:pointer;display:block;overflow:hidden}.thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .25s ease}.card:hover .thumb img{transform:scale(1.035)}.thumb:after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,transparent 45%,#0004);pointer-events:none}.play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:58px;height:58px;border-radius:50%;display:grid;place-items:center;background:#ffffffed;color:#173b61;box-shadow:0 5px 20px #0005;font-size:23px;padding-inline-start:3px;z-index:1;transition:transform .2s ease,background .2s ease}.thumb:hover .play{transform:translate(-50%,-50%) scale(1.1);background:#fff}.card-body{padding:15px 16px 17px;display:flex;flex-direction:column;gap:11px;flex:1}.card h2{font-size:16px;line-height:1.55;margin:0;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:3.1em}.card-meta{display:flex;flex-wrap:wrap;align-items:center;gap:7px}.series-tag{display:inline-flex;max-width:100%;font-size:12px;font-weight:600;color:#244b73;background:#eaf2fa;border-radius:7px;padding:5px 9px;overflow-wrap:anywhere}.speaker-name{display:flex;align-items:center;gap:7px;font-size:13px;color:#64748b;line-height:1.5;overflow-wrap:anywhere}.speaker-icon{font-size:15px;flex:none}.card-footer{border-top:1px solid #f1f5f9;padding-top:11px;margin-top:auto;color:#64748b;font-size:12px;display:flex;align-items:center;justify-content:space-between;gap:8px}.watch-label{color:#244b73;font-weight:700;background:none;border:0;padding:5px 0;font:inherit;cursor:pointer;text-align:right}.watch-label:hover{text-decoration:underline}.watch-label:focus-visible{outline:3px solid #93c5fd;outline-offset:3px;border-radius:3px}.player{width:100%;aspect-ratio:16/9;border:0;display:block}#load{display:block;margin:30px auto;padding:12px 24px;background:#183b63;color:white;border:0;border-radius:9px;cursor:pointer;font-size:16px}#load[hidden]{display:none}#status{text-align:center;color:#64748b;padding:15px}@media(max-width:850px){.filters{grid-template-columns:repeat(2,minmax(0,1fr))}.field-search{grid-column:1/-1}}@media(max-width:460px){main{padding:22px 14px 45px}.filters{grid-template-columns:1fr}.field-search{grid-column:auto}.grid{grid-template-columns:1fr;gap:16px}}@media(prefers-reduced-motion:reduce){.card,.thumb img,.play{transition:none}.card:hover{transform:none}.card:hover .thumb img{transform:none}}
+
+/* Featured latest shiur */
+.featured-section{margin:0 0 30px}.featured-heading{display:flex;align-items:center;gap:12px;margin:0 0 14px}.featured-heading h2{font-size:clamp(21px,3vw,27px);margin:0;color:#173b61}.featured-badge{background:#eaf2fa;color:#244b73;border-radius:999px;padding:5px 11px;font-size:12px;font-weight:700}.featured-card{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);background:#fff;border:1px solid #dce6ef;border-radius:20px;overflow:hidden;box-shadow:0 8px 28px #0f172a12}.featured-media{min-width:0}.featured-media .thumb,.featured-media .player{height:100%;min-height:270px;aspect-ratio:auto}.featured-details{display:flex;flex-direction:column;justify-content:center;align-items:flex-start;padding:30px;gap:16px;min-width:0}.featured-details h3{font-size:clamp(20px,2.5vw,28px);line-height:1.5;margin:0;overflow-wrap:anywhere}.featured-speakers{font-size:15px;color:#64748b;line-height:1.7}.featured-watch{border:0;border-radius:10px;background:#183b63;color:white;font-size:16px;font-weight:700;padding:13px 22px;cursor:pointer}.featured-watch:hover{background:#245481}.featured-watch:focus-visible{outline:3px solid #93c5fd;outline-offset:3px}.featured-section[hidden]{display:none}@media(max-width:680px){.featured-card{grid-template-columns:1fr}.featured-media .thumb,.featured-media .player{min-height:0;aspect-ratio:16/9}.featured-details{padding:20px;gap:12px}}
+/* Two independent featured videos, side by side on desktop */
+.featured-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;margin:0 0 32px;align-items:stretch}
+.featured-grid[hidden]{display:none}.featured-grid .featured-section{min-width:0;margin:0}
+.featured-grid .featured-card{display:flex;flex-direction:column;height:calc(100% - 49px)}
+.featured-grid .featured-media .thumb,.featured-grid .featured-media .player{height:auto;min-height:0;aspect-ratio:16/9}
+.featured-grid .featured-details{padding:20px 22px;gap:12px;align-items:stretch;justify-content:flex-start;flex:1}
+.featured-grid .featured-details h3{font-size:19px;line-height:1.55}
+.featured-grid .featured-watch{margin-top:auto;align-self:flex-start}
+@media(max-width:760px){.featured-grid{grid-template-columns:1fr;gap:25px}.featured-grid .featured-card{height:auto}}
+
+/* Floating video dialog, constrained to the Google Sites embed. */
+.video-modal[hidden]{display:none}
+.video-modal{position:fixed;inset:0;z-index:9999;display:flex;align-items:flex-start;justify-content:center;padding:30px clamp(12px,3vw,30px) 12px;background:rgba(15,23,42,.45);direction:rtl}
+.video-dialog{width:min(880px,100%);max-height:calc(100dvh - 24px);display:flex;flex-direction:column;overflow:hidden;background:#fff;border-radius:16px;box-shadow:0 18px 60px #0005}
+.video-modal-header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px}
+.video-modal-title{margin:0;font-size:15px;line-height:1.45;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.video-modal-close{flex:none;cursor:pointer;border:1px solid #cbd5e1;background:#fff;color:#173b61;border-radius:8px;padding:9px 14px;font-weight:700}
+.video-modal-frame{width:100%;aspect-ratio:16/9;max-height:calc(100dvh - 105px);border:0;display:block;background:#0f172a}
+body.video-modal-open{overflow:hidden}
+@media(max-width:520px){.video-modal{position:absolute;inset:0;height:100%;align-items:flex-start;padding:var(--mobile-player-top,12px) 8px 8px}.video-dialog{max-height:min(75dvh,450px)}body.video-modal-open{overflow:visible}.video-modal-header{padding:8px 10px}.video-modal-title{font-size:13px}.video-modal-close{padding:8px 10px}}
+
+/* Dedicated series directory and pages */
+.series-nav{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 22px;flex-wrap:wrap}
+.series-link,.series-back,.series-tag-button{cursor:pointer;font:inherit;border:1px solid #c9d8e8;border-radius:9px;background:#eaf2fa;color:#244b73;padding:9px 14px;font-weight:700}
+.series-link:hover,.series-back:hover,.series-tag-button:hover{background:#dbeafa}
+.series-tag-button{font-size:12px;padding:5px 9px;border:0;border-radius:7px}
+.series-page[hidden],.series-directory[hidden],.library-view[hidden]{display:none}
+.series-directory{margin-bottom:26px}.series-directory h2{font-size:23px;color:#173b61}
+.series-directory-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(205px,1fr));gap:12px}
+.series-tile{cursor:pointer;text-align:right;border:1px solid #dce6ef;border-radius:13px;background:white;padding:19px;display:flex;flex-direction:column;gap:9px;color:#173b61;box-shadow:0 3px 12px #0f172a0a}
+.series-tile strong{font-size:18px}.series-tile span{color:#64748b;font-size:13px}
+.series-page-head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin:0 0 22px}
+.series-page h2{font-size:clamp(23px,4vw,32px);color:#173b61;margin:10px 0 6px}
+.series-page p{color:#64748b;margin:0}.series-page select{border:1px solid #cbd5e1;border-radius:9px;padding:9px;background:white}
+@media(max-width:520px){.series-directory-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.series-tile{padding:12px}.series-tile strong{font-size:15px}}
+</style></head>
+<body><main><h1>ספריית השיעורים - בית מנחם</h1><p class="subtitle">שיעורים והתוועדויות בבית מדרשינו</p>
+<div class="series-nav"><button id="browse-series" class="series-link" type="button">כל סדרות השיעורים ◀</button></div>
+<section id="series-directory" class="series-directory" hidden><h2>סדרות שיעורים</h2><div id="series-directory-grid" class="series-directory-grid"></div></section>
+<section id="series-page" class="series-page" hidden><button id="series-back" class="series-back" type="button">→ חזרה לספרייה</button><div class="series-page-head"><div><h2 id="series-page-title"></h2><p id="series-page-count"></p></div><label>מיון <select id="series-order"><option value="old">מהישן לחדש</option><option value="new">מהחדש לישן</option></select></label></div><div id="series-grid" class="grid"></div></section>
+<div id="library-view" class="library-view"><div id="featured" class="featured-grid" aria-label="שיעורים אחרונים" hidden></div>
+<div class="filters">
+<div class="field field-search"><label for="search">חיפוש שיעורים</label><input id="search" type="search" placeholder="חיפוש לפי שם השיעור או מילת מפתח…"></div>
+<div class="field"><label for="speaker">מגיד שיעור</label><select id="speaker"><option value="">כל מגידי השיעורים</option></select></div>
+<div class="field"><label for="topic">סדרת שיעורים</label><select id="topic"><option value="">כל הסדרות</option></select></div>
+<div class="field"><label for="sort">מיון לפי</label><select id="sort"><option value="new">מהחדש לישן</option><option value="old">מהישן לחדש</option><option value="az">לפי כותרת</option></select></div>
+</div><div id="grid" class="grid"></div><p id="status" role="status">טוען שיעורים…</p><button id="load" hidden>טען שיעורים נוספים</button></div></main>
+<script>
+// Public video metadata is generated by GitHub Actions; API credentials are not used here.
+const grid=document.getElementById('grid'),search=document.getElementById('search'),status=document.getElementById('status'),load=document.getElementById('load'),speaker=document.getElementById('speaker'),topic=document.getElementById('topic'),sort=document.getElementById('sort');
+let videos=[],visible=24;
+const libraryView=document.getElementById('library-view'),seriesPage=document.getElementById('series-page'),seriesDirectory=document.getElementById('series-directory');
+const seriesGrid=document.getElementById('series-grid'),seriesDirectoryGrid=document.getElementById('series-directory-grid');
+let currentSeries=null;
+function showSeries(name){location.hash='series='+encodeURIComponent(name)}
+function showLibrary(){history.pushState(null,'',location.pathname+location.search);routeSeries()}
+function makeSeriesDirectory(){
+ seriesDirectoryGrid.replaceChildren();
+ const counts=new Map();for(const v of videos)counts.set(v._series,(counts.get(v._series)||0)+1);
+ for(const [name,count] of [...counts].sort((a,b)=>a[0].localeCompare(b[0],'he'))){
+  const tile=document.createElement('button');tile.type='button';tile.className='series-tile';
+  const heading=document.createElement('strong');heading.textContent=name;
+  const sub=document.createElement('span');sub.textContent=count+' שיעורים';tile.append(heading,sub);
+  tile.addEventListener('click',()=>showSeries(name));seriesDirectoryGrid.append(tile);
+ }
+}
+function routeSeries(){
+ const hash=location.hash.slice(1);let name=null;
+ if(hash.startsWith('series=')){try{name=decodeURIComponent(hash.slice(7))}catch{}}
+ const exists=name&&videos.some(v=>v._series===name);
+ currentSeries=exists?name:null;
+ const directory=hash==='series';
+ libraryView.hidden=Boolean(exists||directory);seriesPage.hidden=!exists;seriesDirectory.hidden=!directory;
+ document.getElementById('browse-series').hidden=Boolean(exists||directory);
+ if(exists){document.getElementById('series-page-title').textContent=name;renderSeries()}
+ if(exists||directory)window.scrollTo({top:0,behavior:'instant'});
+}
+function renderSeries(){
+ if(!currentSeries)return;
+ const matched=videos.filter(v=>v._series===currentSeries);
+ if(document.getElementById('series-order').value==='old')matched.reverse();
+ document.getElementById('series-page-count').textContent=matched.length+' שיעורים';
+ renderCards(seriesGrid,matched);
+}
+document.getElementById('browse-series').addEventListener('click',()=>{location.hash='series'});
+document.getElementById('series-back').addEventListener('click',showLibrary);
+document.getElementById('series-order').addEventListener('change',renderSeries);
+window.addEventListener('hashchange',routeSeries);
+const clean=s=>typeof s==='string'?s.trim():'';
+const norm=s=>clean(s).toLocaleLowerCase('he').replace(/[\u05f3\u05f4׳״'"`]/g,'').replace(/[־–—-]/g,' ').replace(/\s+/g,' ').trim();
+const knownSpeakers=[
+ ['הרב יעקב פרץ בלומינג',/יעקב\s+(?:פרץ\s+)?בלומינג/],
+ ['הרב לייבל אלטיין',/לייבל\s+אלטיין/],
+ ['הרב שמואל שור',/שמואל\s+שור/],
+ ['הרב יוסף קליין',/יוסף\s+קליין/],
+ ['הרב יוסף יצחק גורארי׳',/יוסף\s+יצחק\s+גורארי/],
+ ['הרב יוסף יצחק פלטיאל',/יוסף\s+יצחק\s+פלטיאל/],
+ ['הרב לימא וליהלם',/לימא\s+וליהלם/],
+ ['הרב שלום חאריטאנאוו',/שלום\s+חאריטאנאוו/]
+];
+const UNKNOWN_SPEAKER='לא צוין מגיד שיעור';
+// Names explicitly supplied in titles or metadata are discovered automatically.
+// Keep known aliases first, so spelling variants merge into one rabbi.
+function canonicalSpeaker(s){
+ const n=norm(s);
+ for(const [name,re] of knownSpeakers)if(re.test(n))return name;
+ const stripped=clean(s).replace(/^(?:(?:מפי|ע״י|על ידי)\s+)?(?:הרה״ג|הרה״ח|הרב|רבי|רב|ר['׳״\u05f3\u05f4]?)\s+/u,'').trim();
+ const words=stripped.split(/\s+/).filter(Boolean);
+ if(words.length<2||words.length>5)return UNKNOWN_SPEAKER;
+ return 'הרב '+stripped;
+}
+function extractLabeledSpeaker(title){
+ // Match only explicit speaker labels. Stop at separators or common title context.
+ const sections=title.split(/\s*(?:\||[–—]|\s[-]\s|[;]|\n)\s*/u);
+ const marker=/(?:^|\s)(?:(?:מפי|ע״י|על ידי)\s+)?(?:הרה״ג|הרה״ח|הרב|רבי|רב|ר['׳״\u05f3\u05f4]?)\s+([\u05d0-\u05ea][\u05d0-\u05ea'׳״\u05f3\u05f4\s-]*)/u;
+ const stop=/\s+(?:שליט[״']?א|זצ[״']?ל|בנושא|בעניין|על|בשיעור|בשיחת|בפרשת|פרשת|שיעור|התוועדות|יום|ליל|מוצאי|תאריך|תש[\u05d0-\u05ea]+)\b/u;
+ for(const section of sections){
+  const m=section.match(marker);if(!m)continue;
+  const tail=m[1].split(stop)[0].trim();
+  const words=tail.split(/\s+/).filter(Boolean);
+  if(words.length>=2&&words.length<=5)return canonicalSpeaker(tail);
+ }
+ return UNKNOWN_SPEAKER;
+}
+function getSpeaker(v){
+ if(clean(v.speaker))return clean(v.speaker); // Explicit Google Sheets override
+ for(const field of [v.rabbi,v.maggid_shiur])if(clean(field)){
+  const candidate=canonicalSpeaker(field);if(candidate!==UNKNOWN_SPEAKER)return candidate;
+ }
+ const title=clean(v.title),n=norm(title);
+ // Confirmed series-to-speaker association, including future uploads.
+ if(/רמבם\s+לעיונא/u.test(n))return 'הרב יעקב פרץ בלומינג';
+ for(const [name,re] of knownSpeakers)if(re.test(n))return name;
+ return extractLabeledSpeaker(title);
+}
+// A comma, Hebrew comma, semicolon, or line break separates co-presenters.
+// Manual names are kept as entered in Google Sheets.
+function getSpeakers(v){
+ const raw=getSpeaker(v);
+ const names=raw.split(/[,،;؛\n]+/u).map(clean).filter(Boolean);
+ return [...new Set(names.length?names:[UNKNOWN_SPEAKER])];
+}
+const seriesRules=[
+ ['היום יום',/היום\s+יום/],['דרך מצוותיך',/דרך\s+מצוותיך/],['לקוטי שיחות',/(?:לקוטי|ליקוטי)\s+שיחות/],['רמב״ם לעיונא',/רמב["״׳']?ם\s+לעיונא/u],['ספר השיחות',/ספר\s+השיחות/],['תניא',/תניא/],['מאמרים',/מאמר(?:ים)?\b/],['התוועדויות',/התוועדות|התוועדויות/],['פרשת השבוע',/פרשת|פרשה/]
+];
+function getSeries(v){if(clean(v.series))return clean(v.series);if(clean(v.topic))return clean(v.topic);for(const [name,re] of seriesRules)if(re.test(v.title))return name;return 'שיעורים נוספים'}
+function fillOptions(el,values){for(const value of [...new Set(values)].sort((a,b)=>a.localeCompare(b,'he'))){const opt=document.createElement('option');opt.value=value;opt.textContent=value;el.append(opt)}}
+
+// Categorize by explicit series or title, not by upload date.
+function isFarbrengen(v){
+ return /התוועדות|התוועדויות/u.test(clean(v._series)+' '+clean(v.title));
+}
+
+// One shared floating player; the video starts only when requested.
+const videoModal=document.createElement('div');
+videoModal.className='video-modal';videoModal.hidden=true;
+videoModal.setAttribute('role','dialog');videoModal.setAttribute('aria-modal','true');
+videoModal.setAttribute('aria-label','Video player');
+const videoDialog=document.createElement('div');videoDialog.className='video-dialog';
+const videoHeader=document.createElement('div');videoHeader.className='video-modal-header';
+const videoTitle=document.createElement('h2');videoTitle.className='video-modal-title';
+const videoClose=document.createElement('button');videoClose.type='button';videoClose.className='video-modal-close';videoClose.textContent='✕ Close';
+const videoStage=document.createElement('div');
+videoHeader.append(videoTitle,videoClose);videoDialog.append(videoHeader,videoStage);videoModal.append(videoDialog);
+document.body.append(videoModal);
+let previousVideoFocus=null;
+function closeVideoPlayer(){
+ if(videoModal.hidden)return;
+ videoModal.hidden=true;videoStage.replaceChildren();document.body.classList.remove('video-modal-open');
+ if(previousVideoFocus&&previousVideoFocus.isConnected)previousVideoFocus.focus();
+}
+function openVideoPlayer(button,v){
+ previousVideoFocus=button;
+ // Google Sites may show only part of a tall iframe on mobile.
+ // Position the player at the tapped card instead of the iframe's top.
+ if(window.matchMedia('(max-width:520px)').matches){
+  const tappedTop=button.getBoundingClientRect().top+window.scrollY;
+  const dialogHeight=Math.min(window.innerWidth*9/16+60,450);
+  const pageHeight=Math.max(document.documentElement.scrollHeight,document.body.scrollHeight);
+  const top=Math.max(8,Math.min(tappedTop-12,pageHeight-dialogHeight-12));
+  videoModal.style.setProperty('--mobile-player-top',top+'px');
+ }else videoModal.style.removeProperty('--mobile-player-top');
+ videoStage.replaceChildren();videoTitle.textContent=v.title;
+ const iframe=document.createElement('iframe');iframe.className='video-modal-frame';
+ iframe.src='https://www.youtube.com/embed/'+encodeURIComponent(v.id)+'?autoplay=1';
+ iframe.title=v.title;iframe.referrerPolicy='strict-origin-when-cross-origin';
+ iframe.allow='autoplay; encrypted-media; fullscreen; picture-in-picture';iframe.allowFullscreen=true;
+ videoStage.append(iframe);videoModal.hidden=false;document.body.classList.add('video-modal-open');
+ videoClose.focus({preventScroll:true});
+ if(window.matchMedia('(max-width:520px)').matches){
+  requestAnimationFrame(()=>videoDialog.scrollIntoView({block:'start',behavior:'instant'}));
+ }
+}
+videoClose.addEventListener('click',closeVideoPlayer);
+videoModal.addEventListener('click',e=>{if(e.target===videoModal)closeVideoPlayer()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!videoModal.hidden)closeVideoPlayer()});
+
+function makeFeaturedCard(v,headingLabel){
+ const section=document.createElement('section');section.className='featured-section';
+ section.setAttribute('aria-label',headingLabel);
+ const heading=document.createElement('div');heading.className='featured-heading';
+ const headingText=document.createElement('h2');headingText.textContent=headingLabel;
+ const badge=document.createElement('span');badge.className='featured-badge';badge.textContent='חדש באתר';
+ heading.append(headingText,badge);
+ const card=document.createElement('article');card.className='featured-card';
+ const media=document.createElement('div');media.className='featured-media';
+ const thumb=document.createElement('button');thumb.type='button';thumb.className='thumb';thumb.setAttribute('aria-label','נגן '+v.title);
+ const img=document.createElement('img');img.src='https://i.ytimg.com/vi/'+encodeURIComponent(v.id)+'/hqdefault.jpg';img.alt='';
+ const play=document.createElement('span');play.className='play';play.textContent='▶';play.setAttribute('aria-hidden','true');thumb.append(img,play);
+ thumb.addEventListener('click',()=>openVideoPlayer(thumb,v));
+ media.append(thumb);
+ const details=document.createElement('div');details.className='featured-details';
+ if(v._series&&v._series!=='שיעורים נוספים'){const tag=document.createElement('button');tag.type='button';tag.className='series-tag-button';tag.textContent=v._series;tag.addEventListener('click',()=>showSeries(v._series));details.append(tag)}
+ const title=document.createElement('h3');title.textContent=v.title;details.append(title);
+ if(v._speakers.some(name=>name!==UNKNOWN_SPEAKER)){const names=document.createElement('div');names.className='featured-speakers';names.textContent='♙ '+v._speakers.join(' · ');details.append(names)}
+ const watch=document.createElement('button');watch.type='button';watch.className='featured-watch';watch.textContent='לצפייה ◀';watch.addEventListener('click',()=>openVideoPlayer(watch,v));details.append(watch);
+ card.append(media,details);section.append(heading,card);
+ return section;
+}
+function renderFeatured(){
+ const container=document.getElementById('featured');container.replaceChildren();
+ // videos.json is ordered newest first. Hidden videos have already been excluded.
+ const shiur=videos.find(v=>!isFarbrengen(v));
+ const farbrengen=videos.find(v=>isFarbrengen(v)&&v.id!==shiur?.id);
+ if(shiur)container.append(makeFeaturedCard(shiur,'השיעור האחרון'));
+ if(farbrengen)container.append(makeFeaturedCard(farbrengen,'ההתוועדות האחרונה'));
+ container.hidden=!container.childElementCount;
+}
+
+function render(){
+ const q=norm(search.value);
+ const matched=videos.filter(v=>(!q||norm(v.title+' '+v._speakers.join(' ')+' '+v._series).includes(q))&&(!speaker.value||v._speakers.includes(speaker.value))&&(!topic.value||v._series===topic.value));
+ if(sort.value==='old')matched.reverse();else if(sort.value==='az')matched.sort((a,b)=>a.title.localeCompare(b.title,'he'));
+ renderCards(grid,matched.slice(0,visible));
+ load.hidden=matched.length<=visible;status.textContent=matched.length?`${Math.min(visible,matched.length)} מתוך ${matched.length} שיעורים`:'לא נמצאו שיעורים מתאימים';
+}
+function renderCards(target,items){
+ target.replaceChildren();
+ for(const v of items){
+  const card=document.createElement('article');card.className='card';
+  const btn=document.createElement('button');btn.className='thumb';btn.type='button';btn.setAttribute('aria-label','נגן '+v.title);
+  const img=document.createElement('img');img.loading='lazy';img.alt='';img.src='https://i.ytimg.com/vi/'+encodeURIComponent(v.id)+'/hqdefault.jpg';
+  const play=document.createElement('span');play.className='play';play.setAttribute('aria-hidden','true');play.textContent='▶';btn.append(img,play);
+  btn.addEventListener('click',()=>openVideoPlayer(btn,v));
+  const body=document.createElement('div');body.className='card-body';
+  if(v._series&&v._series!=='שיעורים נוספים'){const meta=document.createElement('div');meta.className='card-meta';const tag=document.createElement('button');tag.type='button';tag.className='series-tag-button';tag.textContent=v._series;tag.addEventListener('click',()=>showSeries(v._series));meta.append(tag);body.append(meta)}
+  const h=document.createElement('h2');h.textContent=v.title;h.title=v.title;body.append(h);
+  if(v._speakers.some(name=>name!==UNKNOWN_SPEAKER)){const speakerRow=document.createElement('div');speakerRow.className='speaker-name';const icon=document.createElement('span');icon.className='speaker-icon';icon.setAttribute('aria-hidden','true');icon.textContent='♙';const name=document.createElement('span');name.textContent=v._speakers.join(' · ');speakerRow.append(icon,name);body.append(speakerRow)}
+  const footer=document.createElement('div');footer.className='card-footer';const institution=document.createElement('span');institution.textContent='בית מנחם ליובאוויטש';const watch=document.createElement('button');watch.type='button';watch.className='watch-label';watch.textContent='לצפייה ◀';watch.setAttribute('aria-label','לצפייה: '+v.title);watch.addEventListener('click',()=>openVideoPlayer(watch,v));footer.append(institution,watch);body.append(footer);
+  card.append(btn,body);target.append(card);
+ }
+}
+for(const el of [search,speaker,topic,sort])el.addEventListener(el===search?'input':'change',()=>{visible=24;render()});load.addEventListener('click',()=>{visible+=24;render()});
+fetch('./videos.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Video index not available');return r.json()}).then(data=>{if(!Array.isArray(data))throw Error('Invalid video index');videos=data.filter(v=>v&&v.hidden!==true&&typeof v.id==='string'&&/^[\w-]{11}$/.test(v.id)&&typeof v.title==='string').map(v=>({...v,_speakers:getSpeakers(v),_series:getSeries(v)}));fillOptions(speaker,videos.flatMap(v=>v._speakers));fillOptions(topic,videos.map(v=>v._series));renderFeatured();render();makeSeriesDirectory();routeSeries()}).catch(()=>{status.textContent='לא ניתן לטעון את ספריית השיעורים כעת.'});
+</script></body></html>
+
+
+<!-- Injection By NetFree -->
+<script src="https://netfree.link/injection-script/note-in-site.js" type="text/javascript" async  id="netfree-note-site" jsondata="%7B%22noteSite%22:%22%D7%9B%D7%93%D7%99%20%D7%A9%D7%94%D7%AA%D7%9E%D7%95%D7%A0%D7%95%D7%AA%20%D7%91%D7%90%D7%AA%D7%A8%20%D7%94%D7%96%D7%94%20%D7%99%D7%97%D7%96%D7%A8%D7%95%20%D7%9E%D7%91%D7%93%D7%99%D7%A7%D7%94%2C%20%D7%99%D7%A9%20%D7%9C%D7%94%D7%92%D7%93%D7%99%D7%A8%20%5C%22%D7%90%D7%A4%D7%A9%D7%A8%20%D7%9C%D7%A9%D7%9C%D7%95%D7%97%20%D7%9C%D7%91%D7%93%D7%99%D7%A7%D7%94%20%D7%AA%D7%9E%D7%95%D7%A0%D7%95%D7%AA%20%D7%91%D7%90%D7%AA%D7%A8%D7%99%D7%9D%20%D7%A4%D7%A8%D7%98%D7%99%D7%99%D7%9D%2C%20%D7%91%D7%9E%D7%A7%D7%95%D7%9D%20%D7%9C%D7%97%D7%A1%D7%95%D7%9D%20%D7%90%D7%95%D7%AA%D7%9F%5C%22%20%D7%91%D7%94%D7%92%D7%93%D7%A8%D7%95%D7%AA%20%D7%A1%D7%99%D7%A0%D7%95%D7%9F%20%5B%5B%D7%A6%D7%90%D7%98_AI_%D7%91%D7%A0%D7%98%D7%A4%D7%A8%D7%99%7C%D7%94%D7%99%D7%9B%D7%A0%D7%A1%D7%95%20%D7%9C%D7%9B%D7%90%D7%9F%20%D7%9C%D7%94%D7%A1%D7%91%D7%A8%20%D7%9E%D7%A4%D7%95%D7%A8%D7%98%5D%5D%22%2C%22noteSiteEn%22:%22For%20images%20on%20this%20website%20to%20work%20you%20need%20to%20set%20%5C%22Allow%20images%20on%20private%20sites%20to%20be%20sent%20for%20review%2C%20instead%20of%20blocking%20them%5C%22%20%5B%5BAI_Chats_in_NetFree%7CClick%20here%20to%20read%20more%5D%5D%22%7D"></script><script src="//netfree.link/injection-script/go-payment.js" type="text/javascript" async ></script>
+<script src="//netfree.link/injection-script/popup-card-init.js" type="text/javascript" async ></script>
